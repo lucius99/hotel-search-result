@@ -1,0 +1,31 @@
+/* .row {
+  padding-right: 7.5px;
+  padding-left: 7.5px;
+} */
+
+.fill {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.btn {
+  background-color: #ddd;
+  border: solid 2px;
+  color: black;
+  padding: 16px 32px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #2596be;
+  color: white;
+}
