@@ -8,7 +8,7 @@ import "./hotelBox.css";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import parse from "html-react-parser";
 import Competitor from "../Competitor";
-import SavingPopUp from "../SavingPopUp"
+import SavingPopUp from "../SavingPopUp";
 
 const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,34 +16,52 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
   const [isSort, setIsSort] = useState(false);
   const [isPopUpSaving, setIsPopUpSaving] = useState(false);
   const [savingValue, setSavingValue] = useState(0);
-
   useEffect(() => {
-    if (priceInfo) {
-      setCompetitors([]);
-      if (priceInfo.competitors !== undefined) {
-        for (let key in priceInfo.competitors) {
-          setCompetitors((competitors) => [
-            ...competitors,
-            {
-              name: key,
-              price: priceInfo.competitors[key],
-              saving: Math.round(
-                ((priceInfo.competitors[key] - priceInfo.price) /
-                  priceInfo.price) *
-                  100
-              ),
-            },
-          ]);
+    const fectchCompetitors = async () => {
+      await setCompetitors([]);
+      if (priceInfo) {
+        if (priceInfo.competitors !== undefined) {
+          for (let key in priceInfo.competitors) {
+            await setCompetitors((competitors) => [
+              ...competitors,
+              {
+                name: key,
+                price: priceInfo.competitors[key],
+                saving: Math.round(
+                  ((priceInfo.competitors[key] - priceInfo.price) /
+                    priceInfo.competitors[key]) *
+                    100
+                ),
+              },
+            ]);
+          }
+          await setIsSort(false);
         }
       }
+    };
 
-      if (competitors.length > 0) {
-        let result = competitors.sort((a, b) => (a.price > b.price ? 1 : -1));
-        setIsSort(true);
-        setCompetitors(result);
-      }
-    }
+    fectchCompetitors();
   }, [priceInfo]);
+
+  useEffect(() => {
+    const sortCompetitors = async () => {
+      if (priceInfo) {
+        if (priceInfo.competitors !== undefined) {
+          if (
+            competitors.length === Object.keys(priceInfo.competitors).length
+          ) {
+            let result = competitors.sort((a, b) =>
+              a.price > b.price ? 1 : -1
+            );
+            await setIsSort(true);
+            await setCompetitors(result);
+          }
+        }
+      }
+    };
+
+    sortCompetitors();
+  }, [competitors]);
 
   const onHoverCompetitor = async () => {
     setIsPopUpSaving(true);
@@ -53,9 +71,9 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
     setIsPopUpSaving(false);
   };
 
-  const handleSetSavingValue = async(value) => {
-    setSavingValue(value)
-  }
+  const handleSetSavingValue = async (value) => {
+    setSavingValue(value);
+  };
 
   // useEffect(() => {
   //   competitors.sort((a, b) => (a.price > b.price ? 1 : -1));
@@ -72,19 +90,17 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
   return (
     <Container className="bg-white mb-4 mt-4">
       <Row>
-        <Col sm={4} className="fill">
+        <Col sm={3} className="fill">
           <Image
             style={{ width: "100%", height: "100%" }}
             src={hotelInfo.photo}
             thumbnail
           />
         </Col>
-        <Col sm={8}>
-          {isPopUpSaving && (
-            <SavingPopUp savingValue={savingValue}/>
-          )}
+        <Col sm={9}>
+          {isPopUpSaving && <SavingPopUp savingValue={savingValue} />}
           <Row>
-            <Col sm={9} md={8}>
+            <Col sm={8} md={8}>
               <Row>
                 <Col style={{ fontSize: "2rem", fontWeight: "bold" }}>
                   {hotelInfo.name}
@@ -146,7 +162,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                 </Col>
 
                 {competitors.length > 0 &&
-                  isSort &&
+                  // isSort &&
                   competitors.map((item) => (
                     <Competitor
                       onMouseEnter={onHoverCompetitor}
@@ -161,7 +177,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
             </Col>
 
             <Col
-              sm={3}
+              sm={4}
               md={4}
               className="d-flex flex-column justify-content-between"
             >
@@ -245,7 +261,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                       variant="primary"
                       className="border border-primary text-white"
                       size="lg"
-                      onClick={() => console.log(savingValue)}
+                      onClick={() => console.log(competitors)}
                       style={{ color: "black", fontWeight: "bold" }}
                     >
                       BOOK NOW

@@ -30,6 +30,4 @@ const numberFormat = {
   hundredFormat
 };
 
-console.log(demicalFomat(129.99));
-
 export default numberFormat;

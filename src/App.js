@@ -88,8 +88,9 @@ const App = () => {
 
   return (
     <Router>
-      <div className="container bg-secondary">
-        <Header currency={currency} onSelectCurrency={onSelectCurrency} />
+              <Header currency={currency} onSelectCurrency={onSelectCurrency} />
+
+      <div className="container bg-secondary mt-5">
         {hotelInfo.length > 0
           ? hotelInfo.map((item) => {
               return (

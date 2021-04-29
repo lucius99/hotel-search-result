@@ -19,3 +19,8 @@ body {
   text-align: left;
   position: relative;
 }
+
+.fixed {
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the bottom of the page */
+}

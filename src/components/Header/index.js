@@ -1,13 +1,12 @@
 import React from "react";
 import "./header.css";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Navbar } from "react-bootstrap";
 import { GrCurrency } from "react-icons/gr";
-import { StickyContainer, Sticky } from 'react-sticky';
 
 
 const Header = ({ currency, onSelectCurrency }) => {
   return (
-    <Container className="p-3 bg-white" style={{ position: "sticky", top: 0 }}>
+    <Container className="p-1 bg-white border-dark" style={{ position: "sticky", top: 0.5, zIndex: 99, border: "3px solid" }}>
       <Row>
         <Col>
           <header className="header">
@@ -17,7 +16,7 @@ const Header = ({ currency, onSelectCurrency }) => {
 
         <Col className="d-flex justify-content-end align-items-center">
           <GrCurrency size={25} className="mb-3 mr-2" />
-          <Form.Group>
+          <Form.Group className="border">
             <Form.Control
               as="select"
               defaultValue={currency}
