@@ -11,11 +11,49 @@ import Competitor from "../Competitor";
 import SavingPopUp from "../SavingPopUp";
 
 const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
+  /**
+   * {isOpen}
+   * @type {boolean}
+   * Expand description more
+   */
   const [isOpen, setIsOpen] = useState(false);
+
+  /**
+   * {competitors}
+   * @type {Array}
+   * Store all info competitor of hotel on website
+   *
+   * Expect Value : [
+   *                  {
+   *                    name:   {string},
+   *                    price:  {string},
+   *                    saving: {number}
+   *                   }
+   *                 ]
+   */
   const [competitors, setCompetitors] = useState([]);
+
+  // Temporary not use. Sorry for this inconvenience
   const [isSort, setIsSort] = useState(false);
+
+  /**
+   * {isPopUpSaving}
+   * @type {boolean}
+   * Pop up saving rate over other competitors
+   */
   const [isPopUpSaving, setIsPopUpSaving] = useState(false);
+
+  /**
+   * {savingValue}
+   * @type {number}
+   * Store saving value to pop up
+   */
   const [savingValue, setSavingValue] = useState(0);
+
+  /**
+   * UseEffect run several times when running page
+   * Use to fetch all competitors from API
+   */
   useEffect(() => {
     const fectchCompetitors = async () => {
       await setCompetitors([]);
@@ -43,6 +81,9 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
     fectchCompetitors();
   }, [priceInfo]);
 
+  /**
+   * Use to sort competitors'sprice from low to high
+   */
   useEffect(() => {
     const sortCompetitors = async () => {
       if (priceInfo) {
@@ -53,8 +94,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
             let result = competitors.sort((a, b) =>
               a.price > b.price ? 1 : -1
             );
-            await setIsSort(true);
-            await setCompetitors(result);
+            setCompetitors(result);
           }
         }
       }
@@ -63,6 +103,9 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
     sortCompetitors();
   }, [competitors]);
 
+  /**
+   * Handle set isPopUp when hover over competitor
+   */
   const onHoverCompetitor = async () => {
     setIsPopUpSaving(true);
   };
@@ -71,49 +114,40 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
     setIsPopUpSaving(false);
   };
 
+  /**
+   * Handle set saving rate for hotel
+   */
   const handleSetSavingValue = async (value) => {
     setSavingValue(value);
   };
 
-  // useEffect(() => {
-  //   competitors.sort((a, b) => (a.price > b.price ? 1 : -1));
-  //   setSort(true);
-  // }, [competitors]);
-
-  // useEffect(() => {
-  //     console.log(Object.keys(competitors).length)
-  //     for (let i = 0; i < Object.keys(competitors).length; i++) {
-
-  //     }
-  // }, [competitors]);
-
   return (
     <Container className="bg-white mb-4 mt-4">
       <Row>
-        <Col sm={3} className="fill">
+        <Col sm={3} className="fill">     {/* Image Of Hotel */}
           <Image
             style={{ width: "100%", height: "100%" }}
             src={hotelInfo.photo}
             thumbnail
           />
         </Col>
-        <Col sm={9}>
+        <Col sm={9}>                      {/* Address, Name, Price,.... */}
           {isPopUpSaving && <SavingPopUp savingValue={savingValue} />}
           <Row>
             <Col sm={8} md={8}>
-              <Row>
-                <Col style={{ fontSize: "2rem", fontWeight: "bold" }}>
+              <Row>                                                      {/* Hotel Name */}
+                <Col style={{ fontSize: "2rem", fontWeight: "bold" }}>   
                   {hotelInfo.name}
                 </Col>
               </Row>
-              <Row className="pl-3 pr-3">
-                <Col
+              <Row className="pl-3 pr-3">                                {/* Star Rating */}
+                <Col                      
                   sm={1}
                   lg={1}
                   md={2}
                   className="pr-1 pl-1 d-flex align-items-center justify-content-center rounded-left border font-weight-bold"
                   style={{ backgroundColor: "#fbb511", fontSize: "1.2rem" }}
-                >
+                >                                                         
                   {numberFormat.starsFormat(hotelInfo.stars)}
                 </Col>
                 <Col
@@ -132,7 +166,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   />
                 </Col>
               </Row>
-              <Row className="pt-3 pb-3">
+              <Row className="pt-3 pb-3">                                  {/* Address */}
                 <Col
                   sm={1}
                   xs={2}
@@ -149,15 +183,15 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   {hotelInfo.address}
                 </Col>
               </Row>
-              <Row className="pt-3 pb-0 pl-3 pr-3">
+              <Row className="pt-3 pb-0 pl-3 pr-3">                        {/* Competitors */}
                 <Col
                   sm={12}
                   className="border-info rounded-right rounded-left text-secondary font-weight-bolder text-left pl-0 pb-1"
                 >
                   {competitors.length > 0 ? (
-                    <span>Other Hotel Website:</span>
+                    <span>Others Hotel Website:</span>
                   ) : (
-                    <span>None</span>
+                    <span>There is no hotel to show up</span>
                   )}
                 </Col>
 
@@ -181,8 +215,8 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               md={4}
               className="d-flex flex-column justify-content-between"
             >
-              {/* Rating Price Button */}
-              <Row>
+              
+              <Row>                                            {/* User Review Rating, Price, Button */}
                 <Col
                   sm={12}
                   xs={4}
@@ -255,7 +289,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   </>
                 )}
                 {/* <Row>Đã bao gồm thuế</Row> */}
-                <Col className="d-flex align-items-center justify-content-end pt-4">
+                <Col className="d-flex align-items-center justify-content-end pt-4">    {/* Button Book Now */}
                   {priceInfo ? (
                     <Button
                       variant="primary"
@@ -284,7 +318,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
           </Row>
         </Col>
         <Col>
-          <Row className="border-top border-dark mt-3 rounded-right rounded-left">
+          <Row className="border-top border-dark mt-3 rounded-right rounded-left">         {/* Description */}
             <Col
               className="d-flex flex-column align-items-center pt-4"
               style={{ fontSize: "1.2rem" }}

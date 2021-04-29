@@ -9,14 +9,53 @@ import { Container } from "react-bootstrap";
 
 import "./index.css";
 const App = () => {
+  /**
+   *
+   * @type {string}
+   * Store string of currency
+   */
   const [currency, setCurrency] = useState(
     localStorage.getItem("currency") || "USD"
   );
-
   const [unit, setUnit] = useState("");
+
+  /**
+   * {hotelInfo}
+   * @type {Array}
+   * Store all info competitor of hotel on website
+   *
+   * Expect Value : [
+   *                  {
+   *                    id:   {number},
+   *                    name:  {string},
+   *                    rating: {number}
+   *                    address: {string}
+   *                    photo: {string}
+   *                    description: {string}
+   *
+   *                   }
+   *                 ]
+   */
   const [hotelInfo, setHotelInfo] = useState([]);
+
+  /**
+   * {priceInfo}
+   * @type {Array}
+   * Store all info competitor of hotel on website
+   *
+   * Expect Value : [
+   *                  {
+   *                    id:   {number},
+   *                    price:  {number},
+   *                    competitors: {object}
+   *                   }
+   *                 ]
+   */
   const [priceInfo, setPriceInfo] = useState([]);
 
+  /**
+   * Use to fetch hotel info from API
+   */
   useEffect(() => {
     const fetchHotelInfo = async () => {
       const res = await axios.get(`${BaseURL}`);
@@ -25,6 +64,9 @@ const App = () => {
     fetchHotelInfo();
   }, []);
 
+  /**
+   * Use to fetch price of hotel info from API
+   */
   useEffect(() => {
     const fecthAllPrice = async () => {
       const res = await axios.get(`${BaseURL}/1/${currency}`);
@@ -33,25 +75,6 @@ const App = () => {
 
     fecthAllPrice();
   }, [hotelInfo, currency]);
-
-  // useEffect(() => {
-  //   async function asyncForEach(array, callback) {
-  //     for (let index = 0; index < array.length; index++) {
-  //       await callback(array[index], index, array);
-  //     }
-  //   }
-
-  //   const fetchSpecificPrice = async () => {
-  //     await asyncForEach(hotelInfo, async (item) => {
-  //       let result = price.find((priceInfo) => priceInfo.id === item.id);
-  //       // setHotelInfo({ ...item, priceInfo: result });
-  //       item.priceInfo = result;
-  //     });
-  //   };
-  //   console.log(123);
-
-  //   fetchSpecificPrice();
-  // }, [price]);
 
   useEffect(() => {
     const fetchUnit = async (currency) => {
@@ -88,8 +111,7 @@ const App = () => {
 
   return (
     <Router>
-              <Header currency={currency} onSelectCurrency={onSelectCurrency} />
-
+      <Header currency={currency} onSelectCurrency={onSelectCurrency} />
       <div className="container bg-secondary mt-5">
         {hotelInfo.length > 0
           ? hotelInfo.map((item) => {
@@ -106,7 +128,6 @@ const App = () => {
               );
             })
           : null}
-
         <Footer />
       </div>
     </Router>

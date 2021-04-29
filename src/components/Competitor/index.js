@@ -1,15 +1,23 @@
+/*---------------------------------------------
+    Component Of Competitor
+----------------------------------------------*/
+
 import React from "react";
 import { Col } from "react-bootstrap";
 import numberFormat from "../../utils/numberFormat";
 import "./competitor.css";
 
 const Competitor = ({ competitors, unit, onMouseEnter, onMouseLeave, handleSetSavingValue }) => {
+
+// Function handle set "Saving Value" when hover mouse into competitor
   const handleOnMouseEnter = async () => {
     if (competitors.saving > 0) {
       onMouseEnter();
       handleSetSavingValue(competitors.saving)
     }
   };
+
+  
   return (
     <Col
       id={competitors.name}

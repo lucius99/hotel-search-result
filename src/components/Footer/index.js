@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="text-white">
       <p>CopyRight &copy; 2021</p>
-      <Link to="/about">About</Link>
     </footer>
   );
 };
