@@ -1,17 +1,33 @@
-import React from "react";
-import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Image,
+  Button,
+  Card,
+  Accordion,
+} from "react-bootstrap";
+import { Collapse } from "react-collapse";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import StarRatings from "react-star-ratings";
 import numberFormat from "../../utils/numberFormat";
 import "./hotelBox.css";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import parse from "html-react-parser";
 
 const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Container>
+    <Container className="bg-white mb-4 mt-4">
       <Row>
         <Col sm={4} className="fill">
-          <Image style={{ width: "100%" }} src={hotelInfo.photo} thumbnail />
+          <Image
+            style={{ width: "100%", height: "100%" }}
+            src={hotelInfo.photo}
+            thumbnail
+          />
         </Col>
         <Col sm={8}>
           <Row>
@@ -21,7 +37,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   {hotelInfo.name}
                 </Col>
               </Row>
-              <Row className="pl-3">
+              <Row className="pl-3 pr-3">
                 <Col
                   sm={1}
                   className="pr-1 pl-1 d-flex align-items-center justify-content-center rounded-left border font-weight-bold"
@@ -44,18 +60,26 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                 </Col>
               </Row>
               <Row className="pt-3 pb-3">
-                <Col sm={1} className="pr-0">
-                  <FaMapMarkerAlt size={20} className="ml-2 mt-1" />
+                <Col
+                  sm={1}
+                  xs={2}
+                  className="pr-0 d-flex align-items-start justify-content-start"
+                >
+                  <FaMapMarkerAlt
+                    size={20}
+                    className="ml-2 mt-1 mr-2 text-danger"
+                  />
                 </Col>
                 <Col
                   sm={11}
+                  xs={9}
                   className="nopadding d-flex align-items-end text-primary font-weight-normal"
                   style={{ fontSize: "1.2rem" }}
                 >
                   {hotelInfo.address}
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col
                   className="d-flex flex-column align-items-center pt-4"
                   style={{ fontSize: "1rem" }}
@@ -68,46 +92,135 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                     views and free WiFi throughout the entire hotel.
                   </p>{" "}
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
 
             <Col sm={3} className="d-flex flex-column justify-content-between">
               {/* Rating Price Button */}
               <Row>
-                <Col className="d-flex align-items-center justify-content-end mr-3">
-                  <span className="border bg-primary rounded-circle font-weight-bold btn-lg text-white">{hotelInfo.rating}</span>
+                <Col
+                  sm={12}
+                  xs={4}
+                  className="d-flex align-items-center justify-content-end pr-3"
+                >
+                  <Row className="text-center">
+                    <Col className="pb-2 pr-1 pl-1"><span className="text-primary font-weight-bold stroke" style={{fontSize: "1.3rem"}}>Good</span></Col>
+
+                    <Col sm={6} className="pl-1 pr-1">
+                      <span className="border bg-primary rounded-circle font-weight-bold btn-lg text-white">
+                        {hotelInfo.rating}
+                      </span>
+                    </Col>
+                  </Row>
                 </Col>
-              </Row>
-              <Row>
-                <Col className="d-flex align-items-center justify-content-center">
-                  {priceInfo && (
-                    <span
-                      className="border-primary"
-                      style={{
-                        fontSize: "1.5rem",
-                        fontWeight: 500,
-                        borderBottom: "4px solid",
-                      }}
+                {priceInfo && unit && (
+                  <>
+                    <Col
+                      sm={12}
+                      xs={8}
+                      className="d-flex flex-column align-items-end justify-content-center p-3"
                     >
-                      {priceInfo.price} {unit}
-                    </span>
+                      <Row>
+                        <Col className="align-bottom">
+                          <span
+                            className="border-primary p-1 rounded-right rounded-left"
+                            style={{
+                              fontSize: "1.9rem",
+                              fontWeight: 500,
+                              borderBottom: "4px solid",
+                              fontFamily: `"Bodoni MT", Didot, "Didot LT STD", "Book Antiqua", Garamond, "Times New Roman", serif`
+                            }}
+                          >
+                            {unit !== "₩"
+                              ? numberFormat.demicalFomat(priceInfo.price)
+                              : numberFormat.hundredFormat(
+                                  priceInfo.price
+                                )}{" "}
+                            {unit}
+                          </span>
+                        </Col>
+                      </Row>
+
+                      <Row className="pt-2">
+                        {priceInfo.taxes_and_fees && (
+                          <Col
+                            sm={12}
+                            className="d-flex align-items-end justify-content-end pt-1"
+                          >
+                            <span
+                              className="text-right highlight ml-4 text-white border-danger rounded-right rounded-left pr-2"
+                              style={{
+                                fontSize: "1.1rem",
+                                fontWeight: 500,
+                              }}
+                            >
+                              Taxes and fees included
+                            </span>
+                          </Col>
+                        )}
+                      </Row>
+                    </Col>
+                  </>
+                )}
+                {/* <Row>Đã bao gồm thuế</Row> */}
+                <Col className="d-flex align-items-center justify-content-center pt-5">
+                  {priceInfo ? (
+                    <Button
+                      variant=""
+                      className="border border-primary"
+                      size="lg"
+                      onClick={() => console.log(priceInfo)}
+                      style={{ color: "black", fontWeight: "bold" }}
+                    >
+                      BOOK NOW
+                    </Button>
+                  ) : (
+                    <Button
+                      variant=""
+                      className="border border-primary"
+                      size="lg"
+                      onClick={() => console.log(priceInfo)}
+                      style={{ color: "black", fontWeight: "bold" }}
+                      disabled
+                    >
+                      NOT AVAILABLE
+                    </Button>
                   )}
                 </Col>
               </Row>
-              {/* <Row>Đã bao gồm thuế</Row> */}
-              <Row>
-                <Col className="d-flex align-items-center justify-content-center">
-                  <Button
-                    variant=""
-                    className="border border-primary"
-                    size="lg"
-                    onClick={() => console.log(priceInfo)}
-                    style={{color: "black", fontWeight: "bold"}}
-                  >
-                    BOOK NOW
-                  </Button>{" "}
-                </Col>
-              </Row>
+            </Col>
+          </Row>
+        </Col>
+        <Col>
+          <Row>
+            <Col
+              className="d-flex flex-column align-items-center pt-4"
+              style={{ fontSize: "1rem" }}
+            >
+              {parse(
+                hotelInfo.description.substring(
+                  hotelInfo.description.indexOf("<p>"),
+                  hotelInfo.description.indexOf("</p>") + 4
+                )
+              )}{" "}
+              {isOpen ? "" : "..."}
+              <Collapse isOpened={isOpen}>
+                {parse(
+                  hotelInfo.description.substring(
+                    hotelInfo.description.indexOf("</p>") + 4,
+                    hotelInfo.description.length
+                  )
+                )}
+              </Collapse>
+              <Button
+                variant=""
+                className="border border-primary btn-view"
+                size="md"
+                onClick={() => setIsOpen(!isOpen)}
+                style={{ color: "black", fontWeight: "bold" }}
+              >
+                {isOpen ? `View less <<` : `View more >>`}
+              </Button>
             </Col>
           </Row>
         </Col>

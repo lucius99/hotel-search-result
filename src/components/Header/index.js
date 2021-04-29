@@ -2,10 +2,12 @@ import React from "react";
 import "./header.css";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { GrCurrency } from "react-icons/gr";
+import { StickyContainer, Sticky } from 'react-sticky';
+
 
 const Header = ({ currency, onSelectCurrency }) => {
   return (
-    <Container>
+    <Container className="p-3" style={{ position: "sticky", top: 0 }}>
       <Row>
         <Col>
           <header className="header">

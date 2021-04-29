@@ -29,3 +29,28 @@
   background-color: #2596be;
   color: white;
 }
+
+.btn-view:hover {
+  background-color: green;
+  color: white;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.highlight {
+  background-image: linear-gradient(
+    62deg,
+    rgba(255, 255, 255, 0),
+    red 21%,
+    blue 128%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.stroke {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}

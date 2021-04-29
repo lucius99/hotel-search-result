@@ -1,6 +1,6 @@
-import numbro from 'numbro';
+import numbro from "numbro";
 
-const starsFormat = number => {
+const starsFormat = (number) => {
   return numbro(number).format({
     spaceSeparated: false,
     average: true,
@@ -8,13 +8,28 @@ const starsFormat = number => {
   });
 };
 
-const distanceRound = number => {
-  return Math.round(number * 10) / 10;
+const demicalFomat = (number) => {
+  return numbro(Math.round(number)).format({
+    thousandSeparated: true,
+    spaceSeparated: false,
+    mantissa: 0,
+  });
 };
 
-const numberFormat ={
+const hundredFormat = (number) => {
+  return numbro(Math.round(number / 100) * 100).format({
+    thousandSeparated: true,
+    spaceSeparated: false,
+    mantissa: 0,
+  });
+};
+
+const numberFormat = {
   starsFormat,
-    distanceRound,
-}
+  demicalFomat,
+  hundredFormat
+};
+
+console.log(demicalFomat(129.99));
 
 export default numberFormat;

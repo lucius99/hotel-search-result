@@ -17,4 +17,6 @@ body {
   padding: 30px;
   border-radius: 5px;
   text-align: left;
+  position: relative;
+  background-color: #f4f4f5;
 }
