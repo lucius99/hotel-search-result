@@ -46,7 +46,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   {numberFormat.starsFormat(hotelInfo.stars)}
                 </Col>
                 <Col
-                  sm={3}
+                  sm={4}
                   className="nopadding bg-dark rounded-right rounded-left d-flex justify-content-center pb-1"
                 >
                   <StarRatings
@@ -104,9 +104,16 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   className="d-flex align-items-center justify-content-end pr-3"
                 >
                   <Row className="text-center">
-                    <Col className="pb-2 pr-1 pl-1"><span className="text-primary font-weight-bold stroke" style={{fontSize: "1.3rem"}}>Good</span></Col>
+                    <Col className="pb-2 pr-2 pl-2">
+                      <span
+                        className="text-primary font-weight-bold stroke"
+                        style={{ fontSize: "1.3rem" }}
+                      >
+                        Good
+                      </span>
+                    </Col>
 
-                    <Col sm={6} className="pl-1 pr-1">
+                    <Col sm={6} className="pl-2 pr-2">
                       <span className="border bg-primary rounded-circle font-weight-bold btn-lg text-white">
                         {hotelInfo.rating}
                       </span>
@@ -125,10 +132,10 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                           <span
                             className="border-primary p-1 rounded-right rounded-left"
                             style={{
-                              fontSize: "1.9rem",
+                              fontSize: "1.6rem",
                               fontWeight: 500,
                               borderBottom: "4px solid",
-                              fontFamily: `"Bodoni MT", Didot, "Didot LT STD", "Book Antiqua", Garamond, "Times New Roman", serif`
+                              fontFamily: `"Arial Narrow", Arial, "Helvetica Condensed", Helvetica, sans-serif`,
                             }}
                           >
                             {unit !== "₩"
