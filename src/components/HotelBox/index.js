@@ -31,7 +31,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
         </Col>
         <Col sm={8}>
           <Row>
-            <Col sm={9}>
+            <Col sm={9} md={8}>
               <Row>
                 <Col style={{ fontSize: "2rem", fontWeight: "bold" }}>
                   {hotelInfo.name}
@@ -39,14 +39,14 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               </Row>
               <Row className="pl-3 pr-3">
                 <Col
-                  sm={1}
+                  sm={1} lg={1} md={2}
                   className="pr-1 pl-1 d-flex align-items-center justify-content-center rounded-left border font-weight-bold"
                   style={{ backgroundColor: "#fbb511", fontSize: "1.2rem" }}
                 >
                   {numberFormat.starsFormat(hotelInfo.stars)}
                 </Col>
                 <Col
-                  sm={4}
+                  sm={3} lg={4} md={5}
                   className="nopadding bg-dark rounded-right rounded-left d-flex justify-content-center pb-1"
                 >
                   <StarRatings
@@ -61,17 +61,17 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               </Row>
               <Row className="pt-3 pb-3">
                 <Col
-                  sm={1}
+                  sm={2}
                   xs={2}
                   className="pr-0 d-flex align-items-start justify-content-start"
                 >
                   <FaMapMarkerAlt
-                    size={20}
+                    size={30}
                     className="ml-2 mt-1 mr-2 text-danger"
                   />
                 </Col>
                 <Col
-                  sm={11}
+                  sm={10}
                   xs={9}
                   className="nopadding d-flex align-items-end text-primary font-weight-normal"
                   style={{ fontSize: "1.2rem" }}
@@ -95,7 +95,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               </Row> */}
             </Col>
 
-            <Col sm={3} className="d-flex flex-column justify-content-between">
+            <Col sm={3} md={4} className="d-flex flex-column justify-content-between">
               {/* Rating Price Button */}
               <Row>
                 <Col
