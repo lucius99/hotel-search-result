@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import { BrowserRouter as Router } from "react-router-dom";
 import HotelBox from "./components/HotelBox";
 import axios from "axios";
-import BaseURL from "./components/API/BaseUrl";
+import BaseURL from "./API/BaseUrl";
 import { Container } from "react-bootstrap";
 
 import "./index.css";
@@ -88,7 +88,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="container">
+      <div className="container bg-secondary">
         <Header currency={currency} onSelectCurrency={onSelectCurrency} />
         {hotelInfo.length > 0
           ? hotelInfo.map((item) => {

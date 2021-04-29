@@ -7,7 +7,7 @@ import { StickyContainer, Sticky } from 'react-sticky';
 
 const Header = ({ currency, onSelectCurrency }) => {
   return (
-    <Container className="p-3" style={{ position: "sticky", top: 0 }}>
+    <Container className="p-3 bg-white" style={{ position: "sticky", top: 0 }}>
       <Row>
         <Col>
           <header className="header">

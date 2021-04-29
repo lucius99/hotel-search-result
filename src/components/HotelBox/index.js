@@ -1,13 +1,5 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Image,
-  Button,
-  Card,
-  Accordion,
-} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import { Collapse } from "react-collapse";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import StarRatings from "react-star-ratings";
@@ -15,9 +7,67 @@ import numberFormat from "../../utils/numberFormat";
 import "./hotelBox.css";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import parse from "html-react-parser";
+import Competitor from "../Competitor";
+import SavingPopUp from "../SavingPopUp"
 
 const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [competitors, setCompetitors] = useState([]);
+  const [isSort, setIsSort] = useState(false);
+  const [isPopUpSaving, setIsPopUpSaving] = useState(false);
+  const [savingValue, setSavingValue] = useState(0);
+
+  useEffect(() => {
+    if (priceInfo) {
+      setCompetitors([]);
+      if (priceInfo.competitors !== undefined) {
+        for (let key in priceInfo.competitors) {
+          setCompetitors((competitors) => [
+            ...competitors,
+            {
+              name: key,
+              price: priceInfo.competitors[key],
+              saving: Math.round(
+                ((priceInfo.competitors[key] - priceInfo.price) /
+                  priceInfo.price) *
+                  100
+              ),
+            },
+          ]);
+        }
+      }
+
+      if (competitors.length > 0) {
+        let result = competitors.sort((a, b) => (a.price > b.price ? 1 : -1));
+        setIsSort(true);
+        setCompetitors(result);
+      }
+    }
+  }, [priceInfo]);
+
+  const onHoverCompetitor = async () => {
+    setIsPopUpSaving(true);
+  };
+
+  const onHoverOutCompetitor = async () => {
+    setIsPopUpSaving(false);
+  };
+
+  const handleSetSavingValue = async(value) => {
+    setSavingValue(value)
+  }
+
+  // useEffect(() => {
+  //   competitors.sort((a, b) => (a.price > b.price ? 1 : -1));
+  //   setSort(true);
+  // }, [competitors]);
+
+  // useEffect(() => {
+  //     console.log(Object.keys(competitors).length)
+  //     for (let i = 0; i < Object.keys(competitors).length; i++) {
+
+  //     }
+  // }, [competitors]);
 
   return (
     <Container className="bg-white mb-4 mt-4">
@@ -30,6 +80,9 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
           />
         </Col>
         <Col sm={8}>
+          {isPopUpSaving && (
+            <SavingPopUp savingValue={savingValue}/>
+          )}
           <Row>
             <Col sm={9} md={8}>
               <Row>
@@ -39,14 +92,18 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               </Row>
               <Row className="pl-3 pr-3">
                 <Col
-                  sm={1} lg={1} md={2}
+                  sm={1}
+                  lg={1}
+                  md={2}
                   className="pr-1 pl-1 d-flex align-items-center justify-content-center rounded-left border font-weight-bold"
                   style={{ backgroundColor: "#fbb511", fontSize: "1.2rem" }}
                 >
                   {numberFormat.starsFormat(hotelInfo.stars)}
                 </Col>
                 <Col
-                  sm={3} lg={4} md={5}
+                  sm={3}
+                  lg={4}
+                  md={5}
                   className="nopadding bg-dark rounded-right rounded-left d-flex justify-content-center pb-1"
                 >
                   <StarRatings
@@ -61,17 +118,14 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
               </Row>
               <Row className="pt-3 pb-3">
                 <Col
-                  sm={2}
+                  sm={1}
                   xs={2}
                   className="pr-0 d-flex align-items-start justify-content-start"
                 >
-                  <FaMapMarkerAlt
-                    size={30}
-                    className="ml-2 mt-1 mr-2 text-danger"
-                  />
+                  <FaMapMarkerAlt size={25} className="text-danger pt-1" />
                 </Col>
                 <Col
-                  sm={10}
+                  sm={11}
                   xs={9}
                   className="nopadding d-flex align-items-end text-primary font-weight-normal"
                   style={{ fontSize: "1.2rem" }}
@@ -79,23 +133,38 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   {hotelInfo.address}
                 </Col>
               </Row>
-              {/* <Row>
+              <Row className="pt-3 pb-0 pl-3 pr-3">
                 <Col
-                  className="d-flex flex-column align-items-center pt-4"
-                  style={{ fontSize: "1rem" }}
+                  sm={12}
+                  className="border-info rounded-right rounded-left text-secondary font-weight-bolder text-left pl-0 pb-1"
                 >
-                  <p>
-                    Boasting 15 food and beverage options, 2 swimming pools, and
-                    its own aquarium, Prince Hotel is right next to JR Shinagawa
-                    Train Station, from where Haneda Airport is only a 25-minute
-                    train ride away. This 39-storey hotel offers beautiful Tokyo
-                    views and free WiFi throughout the entire hotel.
-                  </p>{" "}
+                  {competitors.length > 0 ? (
+                    <span>Other Hotel Website:</span>
+                  ) : (
+                    <span>None</span>
+                  )}
                 </Col>
-              </Row> */}
+
+                {competitors.length > 0 &&
+                  isSort &&
+                  competitors.map((item) => (
+                    <Competitor
+                      onMouseEnter={onHoverCompetitor}
+                      onMouseLeave={onHoverOutCompetitor}
+                      key={`key-${item.name}}`}
+                      competitors={item}
+                      unit={unit}
+                      handleSetSavingValue={handleSetSavingValue}
+                    />
+                  ))}
+              </Row>
             </Col>
 
-            <Col sm={3} md={4} className="d-flex flex-column justify-content-between">
+            <Col
+              sm={3}
+              md={4}
+              className="d-flex flex-column justify-content-between"
+            >
               {/* Rating Price Button */}
               <Row>
                 <Col
@@ -107,7 +176,7 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                     <Col className="pb-2 pr-2 pl-2">
                       <span
                         className="text-primary font-weight-bold stroke"
-                        style={{ fontSize: "1.3rem" }}
+                        style={{ fontSize: "1.5rem" }}
                       >
                         Good
                       </span>
@@ -125,15 +194,15 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                     <Col
                       sm={12}
                       xs={8}
-                      className="d-flex flex-column align-items-end justify-content-center p-3"
+                      className="d-flex flex-column align-items-end justify-content-center pr-3 pt-5"
                     >
                       <Row>
                         <Col className="align-bottom">
                           <span
                             className="border-primary p-1 rounded-right rounded-left"
                             style={{
-                              fontSize: "1.6rem",
-                              fontWeight: 500,
+                              fontSize: "1.8rem",
+                              fontWeight: "bold",
                               borderBottom: "4px solid",
                               fontFamily: `"Arial Narrow", Arial, "Helvetica Condensed", Helvetica, sans-serif`,
                             }}
@@ -170,13 +239,13 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
                   </>
                 )}
                 {/* <Row>Đã bao gồm thuế</Row> */}
-                <Col className="d-flex align-items-center justify-content-center pt-5">
+                <Col className="d-flex align-items-center justify-content-end pt-4">
                   {priceInfo ? (
                     <Button
-                      variant=""
-                      className="border border-primary"
+                      variant="primary"
+                      className="border border-primary text-white"
                       size="lg"
-                      onClick={() => console.log(priceInfo)}
+                      onClick={() => console.log(savingValue)}
                       style={{ color: "black", fontWeight: "bold" }}
                     >
                       BOOK NOW
@@ -199,10 +268,10 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
           </Row>
         </Col>
         <Col>
-          <Row>
+          <Row className="border-top border-dark mt-3 rounded-right rounded-left">
             <Col
               className="d-flex flex-column align-items-center pt-4"
-              style={{ fontSize: "1rem" }}
+              style={{ fontSize: "1.2rem" }}
             >
               {parse(
                 hotelInfo.description.substring(
