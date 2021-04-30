@@ -103,6 +103,10 @@ const HotelBox = ({ unit, onBook, hotelInfo, priceInfo }) => {
     sortCompetitors();
   }, [competitors]);
 
+  useEffect(() => {
+    setIsSort(!isSort);
+  }, [competitors])
+
   /**
    * Handle set isPopUp when hover over competitor
    */
